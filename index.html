@@ -15,48 +15,27 @@
 
         <div class="controls">
           <div class="filter-row">
-            <label for="budgetInput" class="visually-hidden"
-              >Monthly Income</label
-            >
             <input
-              title="Set monthly income"
-              placeholder="Set monthly income (optional)"
-              placeholder="Set monthly income (optional)"
-              title="Set monthly income"
               id="searchInput"
               type="search"
               placeholder="Search category or amount..."
-              title="Search for a category or amount"
             />
-            <input id="fromDate" type="date" title="Select start date" />
-            <input
-              id="toDate"
-              type="date"
-              title="Select end date"
-              placeholder="End date"
-            />
-            <button type="button" id="filterBtn" class="btn outline">
-              Filter
-            </button>
-            <button type="button" id="clearFilterBtn" class="btn ghost">
-              Clear
-            </button>
+            <input id="fromDate" type="date" />
+            <input id="toDate" type="date" />
+            <button id="filterBtn" class="btn outline">Filter</button>
+            <button id="clearFilterBtn" class="btn ghost">Clear</button>
           </div>
 
           <div class="actions-row">
-            <button type="button" id="exportBtn" class="btn ghost">
-              Export JSON
-            </button>
+            <button id="exportBtn" class="btn ghost">Export JSON</button>
             <input
               id="importFile"
               type="file"
               accept=".json"
-              class="hidden-input"
+              style="display: none"
             />
-            <button type="button" id="importBtn" class="btn ghost">
-              Import JSON
-            </button>
-            <button type="button" id="themeToggle" class="btn">🌙</button>
+            <button id="importBtn" class="btn ghost">Import JSON</button>
+            <button id="themeToggle" class="btn">🌙</button>
           </div>
         </div>
       </header>
@@ -92,17 +71,12 @@
               id="budgetInput"
               type="number"
               placeholder="Set monthly income (optional)"
-              title="Set monthly income"
             />
-            <button type="button" id="setBudgetBtn" class="btn">
-              Set Budget
-            </button>
+            <button id="setBudgetBtn" class="btn">Set Budget</button>
           </div>
 
           <div class="right">
-            <button type="button" id="addBtn" class="btn primary">
-              + Add Transaction
-            </button>
+            <button id="addBtn" class="btn primary">+ Add Transaction</button>
           </div>
         </section>
 
@@ -160,7 +134,7 @@
               id="txCategoryCustom"
               type="text"
               placeholder="Enter custom category"
-              class="hidden-category-input"
+              style="display: none; margin-top: 8px"
             />
           </div>
 
