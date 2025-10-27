@@ -8,27 +8,22 @@ const txCategorySelect = document.getElementById("txCategorySelect");
 const txCategoryCustom = document.getElementById("txCategoryCustom");
 const txAmount = document.getElementById("txAmount");
 const txType = document.getElementById("txType");
-
 const txTable = document.getElementById("txTable");
 const totalIncomeEl = document.getElementById("totalIncome");
 const totalExpenseEl = document.getElementById("totalExpense");
 const incomeLeftEl = document.getElementById("incomeLeft");
 const savingRateEl = document.getElementById("savingRate");
 const totalIncomeFromEl = document.getElementById("totalIncomeFrom");
-
 const searchInput = document.getElementById("searchInput");
 const fromDate = document.getElementById("fromDate");
 const toDate = document.getElementById("toDate");
 const filterBtn = document.getElementById("filterBtn");
 const clearFilterBtn = document.getElementById("clearFilterBtn");
-
 const exportBtn = document.getElementById("exportBtn");
 const importBtn = document.getElementById("importBtn");
 const importFile = document.getElementById("importFile");
-
 const setBudgetBtn = document.getElementById("setBudgetBtn");
 const budgetInput = document.getElementById("budgetInput");
-
 const themeToggle = document.getElementById("themeToggle");
 
 let transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
@@ -42,6 +37,7 @@ function saveAll() {
   localStorage.setItem("transactions", JSON.stringify(transactions));
   localStorage.setItem("budget", String(budget || 0));
 }
+
 function openModal(mode = "add", tx = null, index = -1) {
   if (mode === "add") {
     document.getElementById("modalTitle").textContent = "Add Transaction";
@@ -83,7 +79,6 @@ function closeModal() {
 
 addBtn.addEventListener("click", () => openModal("add"));
 cancelBtn.addEventListener("click", closeModal);
-
 modal.addEventListener("click", (e) => {
   if (e.target === modal) closeModal();
 });
@@ -100,6 +95,7 @@ txCategorySelect.addEventListener("change", () => {
     txCategoryCustom.value = "";
   }
 });
+
 function render(list = transactions) {
   const totalIncomeTrans = transactions
     .filter((t) => t.type === "income")
@@ -107,23 +103,18 @@ function render(list = transactions) {
   const totalExpense = transactions
     .filter((t) => t.type === "expense")
     .reduce((s, t) => s + Number(t.amount), 0);
-  const baseForLeft = budget && budget > 0 ? budget : totalIncomeTrans;
-  const incomeLeft = baseForLeft - totalExpense;
+  const incomeLeft = totalIncomeTrans - totalExpense;
   let savingRate = 0;
-  if (budget && budget > 0) {
+  if (budget > 0) {
     savingRate = (incomeLeft / budget) * 100;
   } else if (totalIncomeTrans > 0) {
     savingRate = (incomeLeft / totalIncomeTrans) * 100;
   }
   if (!isFinite(savingRate)) savingRate = 0;
 
-  totalIncomeEl.textContent = formatCurrency(
-    totalIncomeTrans + (budget && budget > 0 ? budget : 0)
-  );
+  totalIncomeEl.textContent = formatCurrency(totalIncomeTrans);
   totalIncomeFromEl.textContent =
-    budget && budget > 0
-      ? `budget set: ${formatCurrency(budget)}`
-      : "from transactions";
+    budget > 0 ? `budget set: ${formatCurrency(budget)}` : "from transactions";
   totalExpenseEl.textContent = formatCurrency(totalExpense);
   incomeLeftEl.textContent = formatCurrency(incomeLeft);
   savingRateEl.textContent = `${Number(savingRate).toFixed(1)}%`;
@@ -141,17 +132,16 @@ function render(list = transactions) {
       const sign = t.type === "expense" ? "-" : "+";
       const amountText = `${sign}${formatCurrency(t.amount)}`;
       return `
-      <tr class="${rowClass}">
-        <td>${t.date}</td>
-        <td>${escapeHtml(t.category)}</td>
-        <td class="amount">${amountText}</td>
-        <td><span class="type-chip ${chipClass}">${t.type}</span></td>
-        <td class="actions">
-          <button class="btn" onclick="editTx(${idx})">Edit</button>
-          <button class="btn" onclick="deleteTx(${idx})">Delete</button>
-        </td>
-      </tr>
-    `;
+        <tr class="${rowClass}">
+          <td>${t.date}</td>
+          <td>${escapeHtml(t.category)}</td>
+          <td class="amount">${amountText}</td>
+          <td><span class="type-chip ${chipClass}">${t.type}</span></td>
+          <td class="actions">
+            <button class="btn" onclick="editTx(${idx})">Edit</button>
+            <button class="btn" onclick="deleteTx(${idx})">Delete</button>
+          </td>
+        </tr>`;
     })
     .join("");
 }
@@ -173,16 +163,13 @@ txForm.addEventListener("submit", (e) => {
   category = category.trim() || "Misc";
   const amount = parseFloat(txAmount.value) || 0;
   const type = txType.value;
-
   const txObj = { date, category, amount, type };
-
   if (editingIndex >= 0) {
     transactions[editingIndex] = txObj;
     editingIndex = -1;
   } else {
     transactions.unshift(txObj);
   }
-
   saveAll();
   render();
   closeModal();
@@ -200,6 +187,7 @@ window.deleteTx = function (i) {
   saveAll();
   render();
 };
+
 filterBtn.addEventListener("click", applyFilters);
 clearFilterBtn.addEventListener("click", () => {
   searchInput.value = "";
@@ -212,7 +200,6 @@ function applyFilters() {
   const q = (searchInput.value || "").trim().toLowerCase();
   const f = fromDate.value;
   const t = toDate.value;
-
   const filtered = transactions.filter((tx) => {
     const matchQ =
       !q ||
@@ -223,7 +210,6 @@ function applyFilters() {
     const inTo = !t || tx.date <= t;
     return matchQ && inFrom && inTo;
   });
-
   render(filtered);
 }
 
